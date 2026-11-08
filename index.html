@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>שינון כרטיסיות</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --primary: #38bdf8;
+      --success: #22c55e;
+      --danger: #ef4444;
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      margin: 0;
+      padding: 16px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 94vh;
+      overflow: hidden;
+      user-select: none;
+    }
+    .top-bar {
+      font-size: 16px;
+      color: #94a3b8;
+      font-weight: 600;
+      margin-top: 5px;
+    }
+    .swipe-hints {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 340px;
+      font-size: 13px;
+      color: #64748b;
+      padding: 0 10px;
+    }
+    .card-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 340px;
+      height: 480px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: var(--card-bg);
+      border-radius: 28px;
+      border: 1px solid #334155;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px;
+      touch-action: none;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    .word-area {
+      text-align: center;
+      margin-top: 10px;
+    }
+    .word-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      direction: ltr;
+    }
+    .english-word {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .pos {
+      font-size: 14px;
+      color: #64748b;
+      font-style: italic;
+      margin-top: 2px;
+      margin-bottom: 12px;
+      direction: ltr;
+    }
+    .reveal-box {
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .translation-text {
+      font-size: 22px;
+      font-weight: 700;
+      color: #f1f5f9;
+      display: none;
+    }
+    .context-box {
+      background: #0f172a;
+      border-radius: 18px;
+      padding: 16px;
+      border: 1px solid #334155;
+      direction: ltr;
+      text-align: left;
+    }
+    .context-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .context-title {
+      font-size: 11px;
+      color: #64748b;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .sentence-en {
+      font-size: 15px;
+      line-height: 1.4;
+      color: #e2e8f0;
+      margin-bottom: 10px;
+    }
+    .sentence-en strong { color: var(--primary); }
+    .sentence-he {
+      font-size: 14px;
+      color: #cbd5e1;
+      direction: rtl;
+      text-align: right;
+      display: none;
+      border-top: 1px dashed #334155;
+      padding-top: 8px;
+      margin-top: 8px;
+    }
+    .btn-reveal {
+      background: #334155;
+      border: none;
+      color: #94a3b8;
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-audio {
+      background: #334155;
+      border: none;
+      color: #38bdf8;
+      font-size: 16px;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .badge {
+      position: absolute;
+      top: 20px;
+      padding: 6px 14px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 16px;
+      opacity: 0;
+    }
+    .badge-know {
+      left: 20px;
+      border: 2px solid var(--success);
+      color: var(--success);
+      transform: rotate(-12deg);
+    }
+    .badge-dont-know {
+      right: 20px;
+      border: 2px solid var(--danger);
+      color: var(--danger);
+      transform: rotate(12deg);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar" id="counter">1 / 5</div>
+  <div class="swipe-hints">
+    <span>✖ שמאל: לא מכיר</span>
+    <span>ימין: מכיר ✔</span>
+  </div>
+
+  <div class="card-wrapper">
+    <div class="card" id="card">
+      <div class="badge badge-know" id="badgeKnow">מכיר ✔</div>
+      <div class="badge badge-dont-know" id="badgeDontKnow">לא מכיר ✖</div>
+
+      <div class="word-area">
+        <div class="word-row">
+          <div class="english-word" id="word">Reluctant</div>
+          <button class="btn-audio" type="button" onclick="playWordSound(event)">🔊</button>
+        </div>
+        <div class="pos" id="pos">(adjective)</div>
+        
+        <div class="reveal-box">
+          <button class="btn-reveal" id="btnWord" type="button" onclick="revealWord()">🔍 תרגם מילה</button>
+          <div class="translation-text" id="wordTrans">מהסס / חסר רצון</div>
+        </div>
+      </div>
+
+      <div class="context-box">
+        <div class="context-header">
+          <span class="context-title">Context Example</span>
+          <button class="btn-audio" type="button" style="width: 28px; height: 28px; font-size: 13px;" onclick="playSentenceSound(event)">🔊</button>
+        </div>
+        <div class="sentence-en" id="sentenceEn">He was <strong>reluctant</strong> to admit he made a mistake.</div>
+        
+        <button class="btn-reveal" id="btnSentence" type="button" onclick="revealSentence()">🔍 תרגם משפט</button>
+        <div class="sentence-he" id="sentenceHe">הוא היסס להודות שהוא עשה טעות.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="font-size: 12px; color: #475569; margin-bottom: 5px;">
+    החלק ימינה או שמאלה • לחץ על 🔊 לשמיעה
+  </div>
+
+  <script>
+    const deck = [
+      {
+        word: "Reluctant",
+        pos: "adjective",
+        trans: "מהסס / חסר רצון",
+        sentence: "He was reluctant to admit he made a mistake.",
+        sentenceHtml: "He was <strong>reluctant</strong> to admit he made a mistake.",
+        sentenceTrans: "הוא היסס להודות שהוא עשה טעות."
+      },
+      {
+        word: "Accomplish",
+        pos: "verb",
+        trans: "להשיג / להשלים בהצלחה",
+        sentence: "With hard work, you can accomplish any goal.",
+        sentenceHtml: "With hard work, you can <strong>accomplish</strong> any goal.",
+        sentenceTrans: "בעזרת עבודה קשה, אתה יכול להשיג כל מטרה."
+      },
+      {
+        word: "Crucial",
+        pos: "adjective",
+        trans: "מכריע / חיוני ביותר",
+        sentence: "Water is crucial for survival in the desert.",
+        sentenceHtml: "Water is <strong>crucial</strong> for survival in the desert.",
+        sentenceTrans: "מים הם חיוניים ביותר להישרדות במדבר."
+      },
+      {
+        word: "Inevitable",
+        pos: "adjective",
+        trans: "בלתי נמנע",
+        sentence: "Change is an inevitable part of life.",
+        sentenceHtml: "Change is an <strong>inevitable</strong> part of life.",
+        sentenceTrans: "שינוי הוא חלק בלתי נמנע מהחיים."
+      },
+      {
+        word: "Hesitate",
+        pos: "verb",
+        trans: "להסס",
+        sentence: "Do not hesitate to ask if you have questions.",
+        sentenceHtml: "Do not <strong>hesitate</strong> to ask if you have questions.",
+        sentenceTrans: "אל תהסס לשאול אם יש לך שאלות."
+      }
+    ];
+
+    let currentIndex = 0;
+    const card = document.getElementById('card');
+    const badgeKnow = document.getElementById('badgeKnow');
+    const badgeDontKnow = document.getElementById('badgeDontKnow');
+
+    function render() {
+      const item = deck[currentIndex];
+      document.getElementById('counter').innerText = (currentIndex + 1) + " מתוך " + deck.length;
+      document.getElementById('word').innerText = item.word;
+      document.getElementById('pos').innerText = "(" + item.pos + ")";
+      document.getElementById('wordTrans').innerText = item.trans;
+      document.getElementById('wordTrans').style.display = 'none';
+      document.getElementById('btnWord').style.display = 'inline-block';
+
+      document.getElementById('sentenceEn').innerHTML = item.sentenceHtml;
+      document.getElementById('sentenceHe').innerText = item.sentenceTrans;
+      document.getElementById('sentenceHe').style.display = 'none';
+      document.getElementById('btnSentence').style.display = 'inline-block';
+
+      card.style.transform = 'translate(0px, 0px) rotate(0deg)';
+      card.style.opacity = '1';
+      badgeKnow.style.opacity = '0';
+      badgeDontKnow.style.opacity = '0';
+    }
+
+    function revealWord() {
+      document.getElementById('btnWord').style.display = 'none';
+      document.getElementById('wordTrans').style.display = 'block';
+    }
+
+    function revealSentence() {
+      document.getElementById('btnSentence').style.display = 'none';
+      document.getElementById('sentenceHe').style.display = 'block';
+    }
+
+    function playWordSound(e) {
+      if (e) e.stopPropagation();
+      speak(deck[currentIndex].word);
+    }
+
+    function playSentenceSound(e) {
+      if (e) e.stopPropagation();
+      speak(deck[currentIndex].sentence);
+    }
+
+    // מנגנון שמע נקי ובטוח לאייפון
+    function speak(text) {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US';
+      u.rate = 0.85;
+      window.speechSynthesis.speak(u);
+    }
+
+    // החלקת כרטיסיות (Swipe)
+    let startX = 0, currentX = 0, isDragging = false;
+
+    card.addEventListener('touchstart', function(e) {
+      if (e.target.tagName === 'BUTTON') return;
+      startX = e.touches[0].clientX;
+      isDragging = true;
+      card.style.transition = 'none';
+    });
+
+    card.addEventListener('touchmove', function(e) {
+      if (!isDragging) return;
+      currentX = e.touches[0].clientX - startX;
+      var rotate = currentX * 0.08;
+      card.style.transform = 'translate(' + currentX + 'px, 0px) rotate(' + rotate + 'deg)';
+
+      if (currentX > 30) {
+        badgeKnow.style.opacity = Math.min(currentX / 100, 1);
+        badgeDontKnow.style.opacity = 0;
+      } else if (currentX < -30) {
+        badgeDontKnow.style.opacity = Math.min(-currentX / 100, 1);
+        badgeKnow.style.opacity = 0;
+      } else {
+        badgeKnow.style.opacity = 0;
+        badgeDontKnow.style.opacity = 0;
+      }
+    });
+
+    card.addEventListener('touchend', function() {
+      if (!isDragging) return;
+      isDragging = false;
+      card.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+
+      if (currentX > 100) {
+        card.style.transform = 'translate(400px, 0px) rotate(30deg)';
+        card.style.opacity = '0';
+        setTimeout(nextCard, 200);
+      } else if (currentX < -100) {
+        card.style.transform = 'translate(-400px, 0px) rotate(-30deg)';
+        card.style.opacity = '0';
+        setTimeout(nextCard, 200);
+      } else {
+        card.style.transform = 'translate(0px, 0px) rotate(0deg)';
+        badgeKnow.style.opacity = 0;
+        badgeDontKnow.style.opacity = 0;
+      }
+    });
+
+    function nextCard() {
+      currentIndex = (currentIndex + 1) % deck.length;
+      render();
+    }
+
+    render();
+  </script>
+</body>
+</html>
