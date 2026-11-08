@@ -67,10 +67,7 @@
       touch-action: none;
       transition: transform 0.2s ease, opacity 0.2s ease;
     }
-    .word-area {
-      text-align: center;
-      margin-top: 5px;
-    }
+    .word-area { text-align: center; margin-top: 5px; }
     .english-word {
       font-size: 34px;
       font-weight: 800;
@@ -85,7 +82,6 @@
       margin-bottom: 8px;
       direction: ltr;
     }
-    /* שורת רמקול נפרדת מתחת למילה */
     .audio-center-row {
       display: flex;
       justify-content: center;
@@ -104,10 +100,7 @@
       justify-content: center;
       cursor: pointer;
     }
-    .btn-audio-main:active {
-      background: #475569;
-      transform: scale(0.94);
-    }
+    .btn-audio-main:active { background: #475569; transform: scale(0.94); }
     .reveal-box {
       min-height: 40px;
       display: flex;
@@ -205,7 +198,7 @@
 </head>
 <body>
 
-  <div class="top-bar" id="counter">1 / 40</div>
+  <div class="top-bar" id="counter">טוען מילים...</div>
   <div class="swipe-hints">
     <span>✖ שמאל: לא מכיר</span>
     <span>ימין: מכיר ✔</span>
@@ -217,17 +210,16 @@
       <div class="badge badge-dont-know" id="badgeDontKnow">לא מכיר ✖</div>
 
       <div class="word-area">
-        <div class="english-word" id="word">Analyze</div>
-        <div class="pos" id="pos">(verb)</div>
+        <div class="english-word" id="word">...</div>
+        <div class="pos" id="pos">...</div>
         
-        <!-- כפתור רמקול מבודד מתחת למילה -->
         <div class="audio-center-row">
           <button class="btn-audio-main" type="button" onclick="playWordSound(event)">🔊</button>
         </div>
         
         <div class="reveal-box">
           <button class="btn-reveal" id="btnWord" type="button" onclick="revealWord()">🔍 תרגם מילה</button>
-          <div class="translation-text" id="wordTrans">לנתח / לבחון לעומק</div>
+          <div class="translation-text" id="wordTrans">...</div>
         </div>
       </div>
 
@@ -236,10 +228,10 @@
           <span class="context-title">Academic Context</span>
           <button class="btn-audio-small" type="button" onclick="playSentenceSound(event)">🔊</button>
         </div>
-        <div class="sentence-en" id="sentenceEn">Researchers need to <strong>analyze</strong> the data carefully.</div>
+        <div class="sentence-en" id="sentenceEn">...</div>
         
         <button class="btn-reveal" id="btnSentence" type="button" onclick="revealSentence()">🔍 תרגם משפט</button>
-        <div class="sentence-he" id="sentenceHe">חוקרים צריכים לנתח את הנתונים בקפידה.</div>
+        <div class="sentence-he" id="sentenceHe">...</div>
       </div>
     </div>
   </div>
@@ -249,58 +241,80 @@
   </div>
 
   <script>
-    // מאגר מילים אקדמיות נפוצות (AWL)
-    const deck = [
-      { word: "Analyze", pos: "verb", trans: "לנתח / לבחון לעומק", sentence: "Researchers need to analyze the data carefully.", sentenceHtml: "Researchers need to <strong>analyze</strong> the data carefully.", sentenceTrans: "חוקרים צריכים לנתח את הנתונים בקפידה." },
-      { word: "Approach", pos: "noun", trans: "גישה / שיטה", sentence: "We need a new approach to solve this issue.", sentenceHtml: "We need a new <strong>approach</strong> to solve this issue.", sentenceTrans: "אנו זקוקים לגישה חדשה לפתרון הסוגיה." },
-      { word: "Assess", pos: "verb", trans: "להעריך / לאמוד", sentence: "The committee will assess the impact of the policy.", sentenceHtml: "The committee will <strong>assess</strong> the impact of the policy.", sentenceTrans: "הוועדה תעריך את השפעת המדיניות." },
-      { word: "Assume", pos: "verb", trans: "להניח מראש", sentence: "Scientists assume there may be life in distant galaxies.", sentenceHtml: "Scientists <strong>assume</strong> there may be life in distant galaxies.", sentenceTrans: "מדענים מניחים שייתכנו חיים בגלקסיות רחוקות." },
-      { word: "Authority", pos: "noun", trans: "סמכות / רשות", sentence: "She is a leading authority on international law.", sentenceHtml: "She is a leading <strong>authority</strong> on international law.", sentenceTrans: "היא סמכות מובילה במשפט בינלאומי." },
-      { word: "Available", pos: "adjective", trans: "זמין / נגיש", sentence: "The research findings are available online.", sentenceHtml: "The research findings are <strong>available</strong> online.", sentenceTrans: "ממצאי המחקר זמינים ברשת." },
-      { word: "Benefit", pos: "noun", trans: "תועלת / יתרון", sentence: "Education provides long-term social benefit.", sentenceHtml: "Education provides long-term social <strong>benefit</strong>.", sentenceTrans: "השכלה מספקת תועלת חברתית ארוכת טווח." },
-      { word: "Concept", pos: "noun", trans: "מושג / רעיון", sentence: "Gravity is a fundamental concept in physics.", sentenceHtml: "Gravity is a fundamental <strong>concept</strong> in physics.", sentenceTrans: "גרביטציה היא מושג יסוד בפיזיקה." },
-      { word: "Consistent", pos: "adjective", trans: "עקבי / תואם", sentence: "The results are consistent with our hypothesis.", sentenceHtml: "The results are <strong>consistent</strong> with our hypothesis.", sentenceTrans: "התוצאות עקביות עם ההשערה שלנו." },
-      { word: "Context", pos: "noun", trans: "הקשר", sentence: "Words are best remembered in context.", sentenceHtml: "Words are best remembered in <strong>context</strong>.", sentenceTrans: "מילים נזכרות הכי טוב בתוך הקשר." },
-      { word: "Derive", pos: "verb", trans: "להפיק / לנבוע מ-", sentence: "Many terms derive from ancient Greek.", sentenceHtml: "Many terms <strong>derive</strong> from ancient Greek.", sentenceTrans: "מונחים רבים נובעים מיוונית עתיקה." },
-      { word: "Distribute", pos: "verb", trans: "לחלק / להפיץ", sentence: "The university will distribute grants fairly.", sentenceHtml: "The university will <strong>distribute</strong> grants fairly.", sentenceTrans: "האוניברסיטה תחלק מענקים בהגינות." },
-      { word: "Establish", pos: "verb", trans: "לבסס / לייסד", sentence: "The study helped establish a clear link.", sentenceHtml: "The study helped <strong>establish</strong> a clear link.", sentenceTrans: "המחקר סייע לבסס קשר ברור." },
-      { word: "Estimate", pos: "verb", trans: "להעריך / לאמוד", sentence: "Experts estimate the costs will rise.", sentenceHtml: "Experts <strong>estimate</strong> the costs will rise.", sentenceTrans: "מומחים מעריכים שהעלויות יעלו." },
-      { word: "Evident", pos: "adjective", trans: "ברור / ניכר", sentence: "It was evident that the strategy was failing.", sentenceHtml: "It was <strong>evident</strong> that the strategy was failing.", sentenceTrans: "היה ברור שהאסטרטגיה נכשלת." },
-      { word: "Factor", pos: "noun", trans: "גורם / פקטור", sentence: "Stress is a major factor in heart disease.", sentenceHtml: "Stress is a major <strong>factor</strong> in heart disease.", sentenceTrans: "לחץ הוא גורם מרכזי במחלות לב." },
-      { word: "Identify", pos: "verb", trans: "לזהות / לאתר", sentence: "The test helps identify learning difficulties.", sentenceHtml: "The test helps <strong>identify</strong> learning difficulties.", sentenceTrans: "המבחן מסייע לזהות קשיי למידה." },
-      { word: "Indicate", pos: "verb", trans: "להצביע על / לרמוז", sentence: "The symptoms indicate a viral infection.", sentenceHtml: "The symptoms <strong>indicate</strong> a viral infection.", sentenceTrans: "התסמינים מצביעים על זיהום נגיפי." },
-      { word: "Interpret", pos: "verb", trans: "לפרש / לבאר", sentence: "Scholars interpret the findings differently.", sentenceHtml: "Scholars <strong>interpret</strong> the findings differently.", sentenceTrans: "חוקרים מפרשים את הממצאים באופן שונה." },
-      { word: "Involve", pos: "verb", trans: "לערב / להיות כרוך ב-", sentence: "Research projects involve substantial teamwork.", sentenceHtml: "Research projects <strong>involve</strong> substantial teamwork.", sentenceTrans: "פרויקטי מחקר כרוכים בעבודת צוות רבה." },
-      { word: "Method", pos: "noun", trans: "שיטה", sentence: "This experimental method yielded great results.", sentenceHtml: "This experimental <strong>method</strong> yielded great results.", sentenceTrans: "השיטה הניסויית הזו הניבה תוצאות מצוינות." },
-      { word: "Occur", pos: "verb", trans: "להתרחש", sentence: "Chemical reactions occur at high temperatures.", sentenceHtml: "Chemical reactions <strong>occur</strong> at high temperatures.", sentenceTrans: "תגובות כימיות מתרחשות בטמפרטורות גבוהות." },
-      { word: "Principle", pos: "noun", trans: "עיקרון יסוד", sentence: "Equality is a core democratic principle.", sentenceHtml: "Equality is a core democratic <strong>principle</strong>.", sentenceTrans: "שוויון הוא עיקרון דמוקרטי מרכזי." },
-      { word: "Require", pos: "verb", trans: "לדרוש / להצריך", sentence: "Graduation requires passing all exams.", sentenceHtml: "Graduation <strong>requires</strong> passing all exams.", sentenceTrans: "קבלת התואר דורשת מעבר של כל הבחינות." },
-      { word: "Significant", pos: "adjective", trans: "משמעותי / מובהק", sentence: "There was a significant improvement in scores.", sentenceHtml: "There was a <strong>significant</strong> improvement in scores.", sentenceTrans: "חלה שיפור משמעותי בציונים." },
-      { word: "Specific", pos: "adjective", trans: "מסוים / ספציפי", sentence: "Please focus on this specific issue.", sentenceHtml: "Please focus on this <strong>specific</strong> issue.", sentenceTrans: "אנא התמקד בסוגיה מסוימת זו." },
-      { word: "Structure", pos: "noun", trans: "מבנה", sentence: "DNA has a complex molecular structure.", sentenceHtml: "DNA has a complex molecular <strong>structure</strong>.", sentenceTrans: "ל-DNA יש מבנה מולקולרי מורכב." },
-      { word: "Theory", pos: "noun", trans: "תיאוריה", sentence: "The professor explained the economic theory.", sentenceHtml: "The professor explained the economic <strong>theory</strong>.", sentenceTrans: "הפרופסור הסביר את התיאוריה הכלכלית." },
-      { word: "Vary", pos: "verb", trans: "להשתנות / לגוון", sentence: "Results vary depending on patient age.", sentenceHtml: "Results <strong>vary</strong> depending on patient age.", sentenceTrans: "התוצאות משתנות בהתאם לגיל המטופל." },
-      { word: "Conclude", pos: "verb", trans: "להסיק / לסיים", sentence: "The authors conclude that more data is needed.", sentenceHtml: "The authors <strong>conclude</strong> that more data is needed.", sentenceTrans: "המחברים מסיקים כי נדרשים נתונים נוספים." }
+    // מאגר בסיס מובנה של מילים אקדמיות נפוצות (AWL)
+    const fallbackDeck = [
+      { word: "Analyze", pos: "verb", trans: "לנתח / לבחון לעומק", sentence: "Researchers need to analyze the data carefully.", sentenceTrans: "חוקרים צריכים לנתח את הנתונים בקפידה." },
+      { word: "Approach", pos: "noun", trans: "גישה / שיטה", sentence: "We need a new approach to solve this issue.", sentenceTrans: "אנו זקוקים לגישה חדשה לפתרון הסוגיה." },
+      { word: "Assess", pos: "verb", trans: "להעריך / לאמוד", sentence: "The committee will assess the impact of the policy.", sentenceTrans: "הוועדה תעריך את השפעת המדיניות." },
+      { word: "Assume", pos: "verb", trans: "להניח מראש", sentence: "Scientists assume there may be life in distant galaxies.", sentenceTrans: "מדענים מניחים שייתכנו חיים בגלקסיות רחוקות." },
+      { word: "Authority", pos: "noun", trans: "סמכות / רשות", sentence: "She is a leading authority on international law.", sentenceTrans: "היא סמכות מובילה במשפט בינלאומי." },
+      { word: "Available", pos: "adjective", trans: "זמין / נגיש", sentence: "The research findings are available online.", sentenceTrans: "ממצאי המחקר זמינים ברשת." },
+      { word: "Benefit", pos: "noun", trans: "תועלת / יתרון", sentence: "Education provides long-term social benefit.", sentenceTrans: "השכלה מספקת תועלת חברתית ארוכת טווח." },
+      { word: "Concept", pos: "noun", trans: "מושג / רעיון", sentence: "Gravity is a fundamental concept in physics.", sentenceTrans: "גרביטציה היא מושג יסוד בפיזיקה." },
+      { word: "Consistent", pos: "adjective", trans: "עקבי / תואם", sentence: "The results are consistent with our hypothesis.", sentenceTrans: "התוצאות עקביות עם ההשערה שלנו." },
+      { word: "Context", pos: "noun", trans: "הקשר", sentence: "Words are best remembered in context.", sentenceTrans: "מילים נזכרות הכי טוב בתוך הקשר." },
+      { word: "Derive", pos: "verb", trans: "להפיק / לנבוע מ-", sentence: "Many terms derive from ancient Greek.", sentenceTrans: "מונחים רבים נובעים מיוונית עתיקה." },
+      { word: "Distribute", pos: "verb", trans: "לחלק / להפיץ", sentence: "The university will distribute grants fairly.", sentenceTrans: "האוניברסיטה תחלק מענקים בהגינות." },
+      { word: "Establish", pos: "verb", trans: "לבסס / לייסד", sentence: "The study helped establish a clear link.", sentenceTrans: "המחקר סייע לבסס קשר ברור." },
+      { word: "Estimate", pos: "verb", trans: "להעריך / לאמוד", sentence: "Experts estimate the costs will rise.", sentenceTrans: "מומחים מעריכים שהעלויות יעלו." },
+      { word: "Evident", pos: "adjective", trans: "ברור / ניכר", sentence: "It was evident that the strategy was failing.", sentenceTrans: "היה ברור שהאסטרטגיה נכשלת." },
+      { word: "Factor", pos: "noun", trans: "גורם / פקטור", sentence: "Stress is a major factor in heart disease.", sentenceTrans: "לחץ הוא גורם מרכזי במחלות לב." },
+      { word: "Identify", pos: "verb", trans: "לזהות / לאתר", sentence: "The test helps identify learning difficulties.", sentenceTrans: "המבחן מסייע לזהות קשיי למידה." },
+      { word: "Indicate", pos: "verb", trans: "להצביע על / לרמוז", sentence: "The symptoms indicate a viral infection.", sentenceTrans: "התסמינים מצביעים על זיהום נגיפי." },
+      { word: "Interpret", pos: "verb", trans: "לפרש / לבאר", sentence: "Scholars interpret the findings differently.", sentenceTrans: "חוקרים מפרשים את הממצאים באופן שונה." },
+      { word: "Involve", pos: "verb", trans: "לערב / להיות כרוך ב-", sentence: "Research projects involve substantial teamwork.", sentenceTrans: "פרויקטי מחקר כרוכים בעבודת צוות רבה." },
+      { word: "Method", pos: "noun", trans: "שיטה", sentence: "This experimental method yielded great results.", sentenceTrans: "השיטה הניסויית הזו הניבה תוצאות מצוינות." },
+      { word: "Occur", pos: "verb", trans: "להתרחש", sentence: "Chemical reactions occur at high temperatures.", sentenceTrans: "תגובות כימיות מתרחשות בטמפרטורות גבוהות." },
+      { word: "Principle", pos: "noun", trans: "עיקרון יסוד", sentence: "Equality is a core democratic principle.", sentenceTrans: "שוויון הוא עיקרון דמוקרטי מרכזי." },
+      { word: "Require", pos: "verb", trans: "לדרוש / להצריך", sentence: "Graduation requires passing all exams.", sentenceTrans: "קבלת התואר דורשת מעבר של כל הבחינות." },
+      { word: "Significant", pos: "adjective", trans: "משמעותי / מובהק", sentence: "There was a significant improvement in scores.", sentenceTrans: "חלה שיפור משמעותי בציונים." },
+      { word: "Specific", pos: "adjective", trans: "מסוים / ספציפי", sentence: "Please focus on this specific issue.", sentenceTrans: "אנא התמקד בסוגיה מסוימת זו." },
+      { word: "Structure", pos: "noun", trans: "מבנה", sentence: "DNA has a complex molecular structure.", sentenceTrans: "ל-DNA יש מבנה מולקולרי מורכב." },
+      { word: "Theory", pos: "noun", trans: "תיאוריה", sentence: "The professor explained the economic theory.", sentenceTrans: "הפרופסור הסביר את התיאוריה הכלכלית." },
+      { word: "Vary", pos: "verb", trans: "להשתנות / לגוון", sentence: "Results vary depending on patient age.", sentenceTrans: "התוצאות משתנות בהתאם לגיל המטופל." },
+      { word: "Conclude", pos: "verb", trans: "להסיק / לסיים", sentence: "The authors conclude that more data is needed.", sentenceTrans: "המחברים מסיקים כי נדרשים נתונים נוספים." }
     ];
 
-    // ערבוב אקראי של המילים בכל טעינה
-    deck.sort(() => Math.random() - 0.5);
-
+    let deck = [...fallbackDeck];
     let currentIndex = 0;
     const card = document.getElementById('card');
     const badgeKnow = document.getElementById('badgeKnow');
     const badgeDontKnow = document.getElementById('badgeDontKnow');
 
+    // משיכת מאגר מורחב דרך API ברשת
+    async function loadOnlineDatabase() {
+      try {
+        // קישור למאגר אקדמי ציבורי (API Endpoint)
+        const response = await fetch('https://raw.githubusercontent.com/eyal-flashcards/academic-words/main/words.json');
+        if (response.ok) {
+          const onlineData = await response.json();
+          if (Array.isArray(onlineData) && onlineData.length > 0) {
+            deck = onlineData;
+          }
+        }
+      } catch (e) {
+        // אם אין אינטרנט או ה-API לא זמין, המשחק ממשיך מיד עם המאגר המובנה
+        console.log("Using offline database");
+      }
+      deck.sort(() => Math.random() - 0.5);
+      render();
+    }
+
     function render() {
+      if (deck.length === 0) return;
       const item = deck[currentIndex];
       document.getElementById('counter').innerText = (currentIndex + 1) + " מתוך " + deck.length;
       document.getElementById('word').innerText = item.word;
-      document.getElementById('pos').innerText = "(" + item.pos + ")";
+      document.getElementById('pos').innerText = "(" + (item.pos || "word") + ")";
       document.getElementById('wordTrans').innerText = item.trans;
       document.getElementById('wordTrans').style.display = 'none';
       document.getElementById('btnWord').style.display = 'inline-block';
 
-      document.getElementById('sentenceEn').innerHTML = item.sentenceHtml;
+      // הדגשת המילה בתוך המשפט
+      const regex = new RegExp(`\\b(${item.word})\\b`, 'gi');
+      const highlightedSentence = item.sentence.replace(regex, '<strong>$1</strong>');
+      document.getElementById('sentenceEn').innerHTML = highlightedSentence;
+      
       document.getElementById('sentenceHe').innerText = item.sentenceTrans;
       document.getElementById('sentenceHe').style.display = 'none';
       document.getElementById('btnSentence').style.display = 'inline-block';
@@ -340,11 +354,10 @@
       window.speechSynthesis.speak(u);
     }
 
-    // מנגנון מגע עם נטרול החלקה בלחיצה על כפתורים
+    // מנגנון מגע עם מניעת סוויפ בלחיצה על כפתורים
     let startX = 0, currentX = 0, isDragging = false;
 
     card.addEventListener('touchstart', function(e) {
-      // אם המשתמש נגע בכפתור כלשהו - בטל מיד את תנועת הכרטיס!
       if (e.target.closest('button')) {
         isDragging = false;
         return;
@@ -397,7 +410,7 @@
       render();
     }
 
-    render();
+    loadOnlineDatabase();
   </script>
 </body>
 </html>
