@@ -16,7 +16,7 @@
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     body {
       margin: 0;
-      padding: 16px;
+      padding: 12px 16px;
       background: var(--bg);
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -24,30 +24,69 @@
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      min-height: 94vh;
+      min-height: 96vh;
       overflow: hidden;
       user-select: none;
     }
+    
+    /* סרגל עליון עם מונים */
     .top-bar {
-      font-size: 16px;
-      color: #94a3b8;
-      font-weight: 600;
-      margin-top: 5px;
-    }
-    .swipe-hints {
-      display: flex;
-      justify-content: space-between;
       width: 100%;
       max-width: 340px;
-      font-size: 13px;
-      color: #64748b;
-      padding: 0 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 600;
+      color: #94a3b8;
+      margin-top: 4px;
     }
+    .stat-badge {
+      background: #1e293b;
+      padding: 6px 12px;
+      border-radius: 12px;
+      border: 1px solid #334155;
+    }
+    .stat-badge.green { color: var(--success); border-color: rgba(34, 197, 94, 0.3); }
+
+    /* סרגל כפתורי ניווט (חזור / דלג) */
+    .nav-bar {
+      width: 100%;
+      max-width: 340px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 6px 0;
+    }
+    .btn-nav {
+      flex: 1;
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      padding: 8px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-nav:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .btn-nav:active:not(:disabled) {
+      background: #334155;
+      transform: scale(0.97);
+    }
+
     .card-wrapper {
       position: relative;
       width: 100%;
       max-width: 340px;
-      height: 500px;
+      height: 480px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -63,11 +102,11 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 24px;
+      padding: 22px;
       touch-action: none;
       transition: transform 0.2s ease, opacity 0.2s ease;
     }
-    .word-area { text-align: center; margin-top: 5px; }
+    .word-area { text-align: center; }
     .english-word {
       font-size: 34px;
       font-weight: 800;
@@ -76,16 +115,16 @@
       margin-bottom: 2px;
     }
     .pos {
-      font-size: 14px;
+      font-size: 13px;
       color: #64748b;
       font-style: italic;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       direction: ltr;
     }
     .audio-center-row {
       display: flex;
       justify-content: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .btn-audio-main {
       background: #334155;
@@ -101,22 +140,24 @@
       cursor: pointer;
     }
     .btn-audio-main:active { background: #475569; transform: scale(0.94); }
+    
     .reveal-box {
-      min-height: 40px;
+      min-height: 38px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
     .translation-text {
-      font-size: 22px;
+      font-size: 21px;
       font-weight: 700;
       color: #f1f5f9;
       display: none;
     }
+    
     .context-box {
       background: #0f172a;
       border-radius: 18px;
-      padding: 16px;
+      padding: 14px;
       border: 1px solid #334155;
       direction: ltr;
       text-align: left;
@@ -137,7 +178,7 @@
       font-size: 15px;
       line-height: 1.4;
       color: #e2e8f0;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .sentence-en strong { color: var(--primary); }
     .sentence-he {
@@ -148,13 +189,14 @@
       display: none;
       border-top: 1px dashed #334155;
       padding-top: 8px;
-      margin-top: 8px;
+      margin-top: 6px;
     }
+    
     .btn-reveal {
       background: #334155;
       border: none;
       color: #94a3b8;
-      padding: 8px 14px;
+      padding: 7px 14px;
       border-radius: 12px;
       font-size: 13px;
       cursor: pointer;
@@ -166,44 +208,80 @@
       color: #38bdf8;
       font-size: 13px;
       border-radius: 50%;
-      width: 30px;
-      height: 30px;
+      width: 28px;
+      height: 28px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
     }
+    
     .badge {
       position: absolute;
-      top: 20px;
+      top: 18px;
       padding: 6px 14px;
       border-radius: 12px;
       font-weight: 800;
-      font-size: 16px;
+      font-size: 15px;
       opacity: 0;
     }
     .badge-know {
-      left: 20px;
+      left: 18px;
       border: 2px solid var(--success);
       color: var(--success);
       transform: rotate(-12deg);
     }
     .badge-dont-know {
-      right: 20px;
+      right: 18px;
       border: 2px solid var(--danger);
       color: var(--danger);
       transform: rotate(12deg);
+    }
+
+    /* מסך ניצחון / סיום */
+    .finish-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      width: 100%;
+      max-width: 340px;
+      height: 480px;
+      background: var(--card-bg);
+      border-radius: 28px;
+      border: 1px solid #334155;
+      padding: 24px;
+    }
+    .finish-title { font-size: 26px; font-weight: 800; color: var(--success); margin-bottom: 12px; }
+    .finish-desc { font-size: 16px; color: #94a3b8; line-height: 1.5; margin-bottom: 24px; }
+    .btn-restart {
+      background: var(--primary);
+      color: #0f172a;
+      border: none;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 12px 24px;
+      border-radius: 14px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-  <div class="top-bar" id="counter">טוען מילים...</div>
-  <div class="swipe-hints">
-    <span>✖ שמאל: לא מכיר</span>
-    <span>ימין: מכיר ✔</span>
+  <!-- סרגל מונים -->
+  <div class="top-bar">
+    <div class="stat-badge" id="statRemaining">נותרו: 0</div>
+    <div class="stat-badge green" id="statKnown">נלמדו: 0 ✔</div>
   </div>
 
+  <!-- סרגל חזור / דלג -->
+  <div class="nav-bar">
+    <button class="btn-nav" id="btnUndo" onclick="undoAction(event)" disabled>↩ חזור אחורה</button>
+    <button class="btn-nav" id="btnSkip" onclick="skipCard(event)">⏭ דלג להבא</button>
+  </div>
+
+  <!-- אזור הכרטיסייה -->
   <div class="card-wrapper">
     <div class="card" id="card">
       <div class="badge badge-know" id="badgeKnow">מכיר ✔</div>
@@ -234,15 +312,22 @@
         <div class="sentence-he" id="sentenceHe">...</div>
       </div>
     </div>
+
+    <!-- מסך סיום -->
+    <div class="finish-screen" id="finishScreen">
+      <div style="font-size: 48px; margin-bottom: 12px;">🎉</div>
+      <div class="finish-title">כל הכבוד!</div>
+      <div class="finish-desc">שיננת את כל המילים בסבב זה בהצלחה. כל המילים סומנו כנלמדו!</div>
+      <button class="btn-restart" onclick="restartDeck()">התחל סבב חדש ↺</button>
+    </div>
   </div>
 
-  <div style="font-size: 12px; color: #475569; margin-bottom: 5px;">
-    החלק ימינה או שמאלה
+  <div style="font-size: 12px; color: #475569; margin-bottom: 2px;">
+    ימין: מכיר (יוצא מהתור) • שמאל: לא מכיר (חוזר בהמשך)
   </div>
 
   <script>
-    // מאגר בסיס מובנה של מילים אקדמיות נפוצות (AWL)
-    const fallbackDeck = [
+    const initialDeck = [
       { word: "Analyze", pos: "verb", trans: "לנתח / לבחון לעומק", sentence: "Researchers need to analyze the data carefully.", sentenceTrans: "חוקרים צריכים לנתח את הנתונים בקפידה." },
       { word: "Approach", pos: "noun", trans: "גישה / שיטה", sentence: "We need a new approach to solve this issue.", sentenceTrans: "אנו זקוקים לגישה חדשה לפתרון הסוגיה." },
       { word: "Assess", pos: "verb", trans: "להעריך / לאמוד", sentence: "The committee will assess the impact of the policy.", sentenceTrans: "הוועדה תעריך את השפעת המדיניות." },
@@ -275,45 +360,50 @@
       { word: "Conclude", pos: "verb", trans: "להסיק / לסיים", sentence: "The authors conclude that more data is needed.", sentenceTrans: "המחברים מסיקים כי נדרשים נתונים נוספים." }
     ];
 
-    let deck = [...fallbackDeck];
-    let currentIndex = 0;
+    let activeDeck = [];
+    let knownWords = [];
+    let history = []; // שמירת היסטוריית פעולות לביצוע חזור
+
     const card = document.getElementById('card');
+    const finishScreen = document.getElementById('finishScreen');
     const badgeKnow = document.getElementById('badgeKnow');
     const badgeDontKnow = document.getElementById('badgeDontKnow');
+    const btnUndo = document.getElementById('btnUndo');
 
-    // משיכת מאגר מורחב דרך API ברשת
-    async function loadOnlineDatabase() {
-      try {
-        // קישור למאגר אקדמי ציבורי (API Endpoint)
-        const response = await fetch('https://raw.githubusercontent.com/eyal-flashcards/academic-words/main/words.json');
-        if (response.ok) {
-          const onlineData = await response.json();
-          if (Array.isArray(onlineData) && onlineData.length > 0) {
-            deck = onlineData;
-          }
-        }
-      } catch (e) {
-        // אם אין אינטרנט או ה-API לא זמין, המשחק ממשיך מיד עם המאגר המובנה
-        console.log("Using offline database");
-      }
-      deck.sort(() => Math.random() - 0.5);
+    function init() {
+      activeDeck = [...initialDeck].sort(() => Math.random() - 0.5);
+      knownWords = [];
+      history = [];
       render();
     }
 
     function render() {
-      if (deck.length === 0) return;
-      const item = deck[currentIndex];
-      document.getElementById('counter').innerText = (currentIndex + 1) + " מתוך " + deck.length;
+      // עדכון מונים
+      document.getElementById('statRemaining').innerText = `נותרו: ${activeDeck.length}`;
+      document.getElementById('statKnown').innerText = `נלמדו: ${knownWords.length} ✔`;
+      btnUndo.disabled = history.length === 0;
+
+      // בדיקה אם סיימנו את כל המילים
+      if (activeDeck.length === 0) {
+        card.style.display = 'none';
+        finishScreen.style.display = 'flex';
+        return;
+      }
+
+      card.style.display = 'flex';
+      finishScreen.style.display = 'none';
+
+      const item = activeDeck[0];
       document.getElementById('word').innerText = item.word;
       document.getElementById('pos').innerText = "(" + (item.pos || "word") + ")";
       document.getElementById('wordTrans').innerText = item.trans;
       document.getElementById('wordTrans').style.display = 'none';
       document.getElementById('btnWord').style.display = 'inline-block';
 
-      // הדגשת המילה בתוך המשפט
+      // הדגשת המילה במשפט
       const regex = new RegExp(`\\b(${item.word})\\b`, 'gi');
-      const highlightedSentence = item.sentence.replace(regex, '<strong>$1</strong>');
-      document.getElementById('sentenceEn').innerHTML = highlightedSentence;
+      const highlighted = item.sentence.replace(regex, '<strong>$1</strong>');
+      document.getElementById('sentenceEn').innerHTML = highlighted;
       
       document.getElementById('sentenceHe').innerText = item.sentenceTrans;
       document.getElementById('sentenceHe').style.display = 'none';
@@ -323,6 +413,52 @@
       card.style.opacity = '1';
       badgeKnow.style.opacity = '0';
       badgeDontKnow.style.opacity = '0';
+    }
+
+    // סוויפ ימינה: מכיר -> יוצא מהתור לחלוטין
+    function handleKnow() {
+      const item = activeDeck.shift();
+      knownWords.push(item);
+      history.push({ action: 'know', item: item });
+      render();
+    }
+
+    // סוויפ שמאלה: לא מכיר -> עובר לסוף התור
+    function handleDontKnow() {
+      const item = activeDeck.shift();
+      activeDeck.push(item);
+      history.push({ action: 'dont-know', item: item });
+      render();
+    }
+
+    // כפתור דלג: עובר לסוף התור בלי לרשום הצלחה/כישלון
+    function skipCard(e) {
+      if (e) { e.stopPropagation(); e.preventDefault(); }
+      if (activeDeck.length <= 1) return;
+      const item = activeDeck.shift();
+      activeDeck.push(item);
+      history.push({ action: 'skip', item: item });
+      render();
+    }
+
+    // כפתור חזור אחורה
+    function undoAction(e) {
+      if (e) { e.stopPropagation(); e.preventDefault(); }
+      if (history.length === 0) return;
+
+      const last = history.pop();
+      if (last.action === 'know') {
+        knownWords.pop();
+        activeDeck.unshift(last.item);
+      } else if (last.action === 'dont-know' || last.action === 'skip') {
+        activeDeck.pop(); // מסיר מהסוף
+        activeDeck.unshift(last.item); // מחזיר לראש התור
+      }
+      render();
+    }
+
+    function restartDeck() {
+      init();
     }
 
     function revealWord() {
@@ -337,12 +473,12 @@
 
     function playWordSound(e) {
       if (e) { e.stopPropagation(); e.preventDefault(); }
-      speak(deck[currentIndex].word);
+      if (activeDeck.length > 0) speak(activeDeck[0].word);
     }
 
     function playSentenceSound(e) {
       if (e) { e.stopPropagation(); e.preventDefault(); }
-      speak(deck[currentIndex].sentence);
+      if (activeDeck.length > 0) speak(activeDeck[0].sentence);
     }
 
     function speak(text) {
@@ -354,7 +490,7 @@
       window.speechSynthesis.speak(u);
     }
 
-    // מנגנון מגע עם מניעת סוויפ בלחיצה על כפתורים
+    // מנגנון מגע לסוויפ
     let startX = 0, currentX = 0, isDragging = false;
 
     card.addEventListener('touchstart', function(e) {
@@ -393,11 +529,11 @@
       if (currentX > 100) {
         card.style.transform = 'translate(400px, 0px) rotate(30deg)';
         card.style.opacity = '0';
-        setTimeout(nextCard, 200);
+        setTimeout(handleKnow, 200);
       } else if (currentX < -100) {
         card.style.transform = 'translate(-400px, 0px) rotate(-30deg)';
         card.style.opacity = '0';
-        setTimeout(nextCard, 200);
+        setTimeout(handleDontKnow, 200);
       } else {
         card.style.transform = 'translate(0px, 0px) rotate(0deg)';
         badgeKnow.style.opacity = 0;
@@ -405,12 +541,7 @@
       }
     });
 
-    function nextCard() {
-      currentIndex = (currentIndex + 1) % deck.length;
-      render();
-    }
-
-    loadOnlineDatabase();
+    init();
   </script>
 </body>
 </html>
